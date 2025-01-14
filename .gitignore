@@ -1,0 +1,12 @@
+# Ignore hidden files/folders
+.*
+.*/*
+
+*.iml
+
+# Ignore maven target
+target/
+
+!.gitignore
+!.mvn
+!.mvn/*
