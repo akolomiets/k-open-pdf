@@ -1,13 +1,13 @@
 package com.npk.documents
 
-import com.lowagie.text.*
-import com.lowagie.text.alignment.HorizontalAlignment
-import com.lowagie.text.alignment.VerticalAlignment
-import com.lowagie.text.error_messages.MessageLocalization
-import com.lowagie.text.html.FontSize
-import com.lowagie.text.html.HtmlTags
-import com.lowagie.text.html.WebColors
-import com.lowagie.text.pdf.BaseFont
+import org.openpdf.text.*
+import org.openpdf.text.alignment.HorizontalAlignment
+import org.openpdf.text.alignment.VerticalAlignment
+import org.openpdf.text.error_messages.MessageLocalization
+import org.openpdf.text.html.FontSize
+import org.openpdf.text.html.HtmlTags
+import org.openpdf.text.html.WebColors
+import org.openpdf.text.pdf.BaseFont
 import com.npk.documents.DesignedTable.Companion.BORDER_WIDTH
 import com.npk.documents.DesignedTable.Companion.EmptyDesign
 import com.npk.documents.DesignedTable.Design

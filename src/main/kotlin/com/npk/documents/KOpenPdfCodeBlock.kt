@@ -5,8 +5,8 @@ import com.fasterxml.jackson.core.JsonToken
 import com.fasterxml.jackson.core.io.JsonStringEncoder
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.lowagie.text.*
-import com.lowagie.text.alignment.HorizontalAlignment
+import org.openpdf.text.*
+import org.openpdf.text.alignment.HorizontalAlignment
 import com.npk.documents.CodeBlockTable.Companion.monospacedFont
 import com.npk.documents.KOpenPdfConstant.EMPTY_SYMBOL
 

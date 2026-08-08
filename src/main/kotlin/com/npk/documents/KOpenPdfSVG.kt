@@ -1,9 +1,9 @@
 package com.npk.documents
 
-import com.lowagie.text.BadElementException
-import com.lowagie.text.Image
-import com.lowagie.text.ImgTemplate
-import com.lowagie.text.pdf.PdfTemplate
+import org.openpdf.text.BadElementException
+import org.openpdf.text.Image
+import org.openpdf.text.ImgTemplate
+import org.openpdf.text.pdf.PdfTemplate
 import org.apache.batik.anim.dom.SAXSVGDocumentFactory
 import org.apache.batik.bridge.DocumentLoader
 import org.apache.batik.bridge.GVTBuilder

@@ -1,8 +1,8 @@
 package com.npk.documents
 
-import com.lowagie.text.*
-import com.lowagie.text.alignment.HorizontalAlignment
-import com.lowagie.text.html.WebColors
+import org.openpdf.text.*
+import org.openpdf.text.alignment.HorizontalAlignment
+import org.openpdf.text.html.WebColors
 import com.npk.GeneratedDocumentPath
 import com.npk.TestValueGenerator.CountryType
 import com.npk.documents.DesignedTable.Companion.EmptyDesign

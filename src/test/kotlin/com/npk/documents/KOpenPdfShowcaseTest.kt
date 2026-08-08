@@ -1,9 +1,9 @@
 package com.npk.documents
 
-import com.lowagie.text.Chapter
-import com.lowagie.text.Chunk
-import com.lowagie.text.alignment.HorizontalAlignment
-import com.lowagie.text.alignment.VerticalAlignment
+import org.openpdf.text.Chapter
+import org.openpdf.text.Chunk
+import org.openpdf.text.alignment.HorizontalAlignment
+import org.openpdf.text.alignment.VerticalAlignment
 import com.npk.GeneratedDocumentPath
 import com.npk.TestValueGenerator.CountryType
 import com.npk.documents.AbstractPdfDocument.PdfDocumentEncryption.EncryptionType
@@ -31,11 +31,6 @@ internal class KOpenPdfShowcaseTest {
     fun `generate a DSL showcase`() = generatedPdfPath.generatePdfDocument("k_open_pdf_dsl_showcase.pdf") { output ->
         TagPhrase.registerFAIconHandler()
         NumberedPdfDocument(output).use(::generateShowcaseDocument)
-
-        NumberedPdfDocument(output).useDocument {
-            defaultFont {}
-        }
-
     }
 
     private fun generateShowcaseDocument(document: BasePdfDocument): Unit = with(document) {

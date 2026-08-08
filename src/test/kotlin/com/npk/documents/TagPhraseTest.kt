@@ -1,17 +1,16 @@
 package com.npk.documents
 
-import com.lowagie.text.Font
-import com.lowagie.text.Paragraph
-import com.lowagie.text.html.FontSize
-import com.lowagie.text.html.HtmlTags
-import com.lowagie.text.html.WebColors
+import org.openpdf.text.Font
+import org.openpdf.text.Paragraph
+import org.openpdf.text.html.FontSize
+import org.openpdf.text.html.HtmlTags
+import org.openpdf.text.html.WebColors
 import com.npk.GeneratedDocumentPath
 import com.npk.documents.BreakingLine.breakingLine
 import com.npk.generatePdfDocument
 import org.junit.jupiter.api.Test
 import java.nio.file.Path
 import kotlin.math.round
-
 
 internal class TagPhraseTest {
 

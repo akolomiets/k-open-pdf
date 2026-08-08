@@ -1,10 +1,10 @@
 package com.npk.documents
 
-import com.lowagie.text.*
-import com.lowagie.text.alignment.HorizontalAlignment
-import com.lowagie.text.html.FontSize
-import com.lowagie.text.pdf.draw.DottedLineSeparator
-import com.lowagie.text.pdf.draw.LineSeparator
+import org.openpdf.text.*
+import org.openpdf.text.alignment.HorizontalAlignment
+import org.openpdf.text.html.FontSize
+import org.openpdf.text.pdf.draw.DottedLineSeparator
+import org.openpdf.text.pdf.draw.LineSeparator
 import com.npk.documents.KOpenPdfConstant.EMPTY_SYMBOL
 import com.npk.documents.KOpenPdfConstant.HYPHEN_SYMBOL
 import java.net.URL

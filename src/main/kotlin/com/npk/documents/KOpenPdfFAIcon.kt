@@ -1,7 +1,7 @@
 package com.npk.documents
 
-import com.lowagie.text.Chunk
-import com.lowagie.text.Font
+import org.openpdf.text.Chunk
+import org.openpdf.text.Font
 import com.npk.documents.PdfDocumentFonts.DEFAULT_SIZE
 import com.npk.documents.TagPhrase.TagPhraseHandler
 

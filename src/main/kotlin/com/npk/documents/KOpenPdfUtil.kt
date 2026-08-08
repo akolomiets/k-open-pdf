@@ -1,9 +1,9 @@
 package com.npk.documents
 
-import com.lowagie.text.Chunk
-import com.lowagie.text.Element
-import com.lowagie.text.FontFactory
-import com.lowagie.text.Phrase
+import org.openpdf.text.Chunk
+import org.openpdf.text.Element
+import org.openpdf.text.FontFactory
+import org.openpdf.text.Phrase
 
 
 inline fun <T : AbstractPdfDocument> T.useDocument(block: T.() -> Unit) = this.use(block)

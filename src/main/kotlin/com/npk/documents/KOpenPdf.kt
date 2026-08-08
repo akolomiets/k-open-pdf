@@ -1,8 +1,8 @@
 package com.npk.documents
 
-import com.lowagie.text.*
-import com.lowagie.text.html.FontSize
-import com.lowagie.text.pdf.*
+import org.openpdf.text.*
+import org.openpdf.text.html.FontSize
+import org.openpdf.text.pdf.*
 import com.npk.documents.AbstractPdfDocument.PdfDocumentEncryption.EncryptionType
 import java.awt.Color
 import java.io.OutputStream

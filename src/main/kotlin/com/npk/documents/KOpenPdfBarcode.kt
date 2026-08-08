@@ -3,9 +3,9 @@ package com.npk.documents
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.common.BitMatrix
 import com.google.zxing.qrcode.QRCodeWriter
-import com.lowagie.text.Image
-import com.lowagie.text.pdf.*
-import com.lowagie.text.pdf.codec.CCITTG4Encoder
+import org.openpdf.text.Image
+import org.openpdf.text.pdf.*
+import org.openpdf.text.pdf.codec.CCITTG4Encoder
 import kotlin.experimental.or
 
 typealias BarcodeBuilder = (PdfBodyContext) -> Image

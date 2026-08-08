@@ -1,12 +1,12 @@
 package com.npk.documents
 
-import com.lowagie.text.*
-import com.lowagie.text.alignment.HorizontalAlignment
-import com.lowagie.text.alignment.VerticalAlignment
-import com.lowagie.text.html.FontSize
-import com.lowagie.text.pdf.PdfAction
-import com.lowagie.text.pdf.PdfContentByte
-import com.lowagie.text.pdf.PdfTemplate
+import org.openpdf.text.*
+import org.openpdf.text.alignment.HorizontalAlignment
+import org.openpdf.text.alignment.VerticalAlignment
+import org.openpdf.text.html.FontSize
+import org.openpdf.text.pdf.PdfAction
+import org.openpdf.text.pdf.PdfContentByte
+import org.openpdf.text.pdf.PdfTemplate
 import com.npk.documents.CleanSections.appendSpacing
 import com.npk.documents.DesignedTable.Design
 import com.npk.documents.KOpenPdfConstant.EMPTY_SYMBOL
@@ -48,7 +48,7 @@ interface PdfBodyDSL {
 
 }
 
-typealias PdfList = com.lowagie.text.List
+typealias PdfList = org.openpdf.text.List
 
 object KOpenPdfConstant {
 
