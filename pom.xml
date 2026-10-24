@@ -5,7 +5,7 @@
 
     <groupId>com.npk</groupId>
     <artifactId>k-open-pdf</artifactId>
-    <version>2026.08</version>
+    <version>2026.10</version>
 
     <name>KOpenPdf</name>
     <description>Simple Kotlin DSL to create simple pdf document</description>

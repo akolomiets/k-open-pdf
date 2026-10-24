@@ -69,7 +69,7 @@ internal class KOpenPdfShowcaseTest {
             "<color DarkCyan>K Open Pdf Showcase</color>\n" +
             "<color DarkCyan><size 80%>Simple Kotlin DSL for creating simple Pdf document</size></color>"
         )
-        footer("Generated on ${DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(ZonedDateTime.now())}\nVersion 2026.08")
+        footer("Generated on ${DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(ZonedDateTime.now())}\nVersion 2026.10")
         body {
             barcode(Barcodes.qrcode("https://github.com/akolomiets/k-open-pdf")) {
                 scaleToFit(68f)
@@ -246,7 +246,7 @@ internal class KOpenPdfShowcaseTest {
             "Add a page header and footer",
             """
             header("<color DarkCyan>K Open Pdf Showcase</color>")
-            footer("Version 2026.08")
+            footer("Version 2026.10")
             """.trimIndent()
         )
     }
