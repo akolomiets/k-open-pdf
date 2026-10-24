@@ -1,9 +1,5 @@
 package com.npk.documents
 
-import org.openpdf.text.Chapter
-import org.openpdf.text.Chunk
-import org.openpdf.text.alignment.HorizontalAlignment
-import org.openpdf.text.alignment.VerticalAlignment
 import com.npk.GeneratedDocumentPath
 import com.npk.TestValueGenerator.CountryType
 import com.npk.documents.AbstractPdfDocument.PdfDocumentEncryption.EncryptionType
@@ -17,6 +13,10 @@ import com.npk.documents.PdfBodyParagraphBuilder.TextAlignment
 import com.npk.generatePdfDocument
 import com.npk.random
 import org.junit.jupiter.api.Test
+import org.openpdf.text.Chapter
+import org.openpdf.text.Chunk
+import org.openpdf.text.alignment.HorizontalAlignment
+import org.openpdf.text.alignment.VerticalAlignment
 import java.net.URI
 import java.nio.file.Path
 import java.time.ZonedDateTime
@@ -37,7 +37,7 @@ internal class KOpenPdfShowcaseTest {
         defaultFont {
             /* Change default font configuration */
             // size = 10f
-            // color = com.lowagie.text.html.WebColors.getRGBColor("DarkGray")
+            // color = com.npk.documents.WebColors.parse("DarkGray")
             // setFactory { size, color, style -> PdfDocumentFonts.getUnicodeFont("font-name", size, color) }
         }
 
@@ -69,7 +69,7 @@ internal class KOpenPdfShowcaseTest {
             "<color DarkCyan>K Open Pdf Showcase</color>\n" +
             "<color DarkCyan><size 80%>Simple Kotlin DSL for creating simple Pdf document</size></color>"
         )
-        footer("Generated on ${DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(ZonedDateTime.now())}\nVersion 2024.12")
+        footer("Generated on ${DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(ZonedDateTime.now())}\nVersion 2026.08")
         body {
             barcode(Barcodes.qrcode("https://github.com/akolomiets/k-open-pdf")) {
                 scaleToFit(68f)
@@ -246,7 +246,7 @@ internal class KOpenPdfShowcaseTest {
             "Add a page header and footer",
             """
             header("<color DarkCyan>K Open Pdf Showcase</color>")
-            footer("Version 2024.12")
+            footer("Version 2026.08")
             """.trimIndent()
         )
     }
@@ -758,7 +758,7 @@ internal class KOpenPdfShowcaseTest {
             <dependency>
                 <groupId>org.apache.xmlgraphics</groupId>
                 <artifactId>batik-transcoder</artifactId>
-                <version>1.18</version>
+                <version>${'$'}{batik-transcoder.version}</version>
             </dependency>
             
             ...
@@ -1241,7 +1241,7 @@ internal class KOpenPdfShowcaseTest {
                 <dependency>
                     <groupId>com.google.zxing</groupId>
                     <artifactId>core</artifactId>
-                    <version>3.5.3</version>
+                    <version>${'$'}{zxing.version}</version>
                 </dependency>
                 
                 ...

@@ -1,8 +1,5 @@
 package com.npk.documents
 
-import org.openpdf.text.*
-import org.openpdf.text.alignment.HorizontalAlignment
-import org.openpdf.text.html.WebColors
 import com.npk.GeneratedDocumentPath
 import com.npk.TestValueGenerator.CountryType
 import com.npk.documents.DesignedTable.Companion.EmptyDesign
@@ -13,6 +10,8 @@ import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
+import org.openpdf.text.*
+import org.openpdf.text.alignment.HorizontalAlignment
 import java.awt.Point
 import java.nio.file.Path
 import java.time.ZonedDateTime
@@ -276,7 +275,7 @@ internal class DesignedTableTest {
                     designer {
                         border = Rectangle.BOX
                         borderColor = java.awt.Color.BLACK
-                        headerBackgroundColor = WebColors.getRGBColor("LightSteelBlue")
+                        headerBackgroundColor = WebColors.parse("LightSteelBlue")
                         headerHorizontalAlignment = HorizontalAlignment.CENTER
                         showColumnStripes = true
                         showRowStripes = true
@@ -320,11 +319,11 @@ internal class DesignedTableTest {
                         table.isUseVariableBorders = true
                         table.borderWidthTop = 1f
                         table.borderWidthBottom = 1f
-                        table.borderColor = WebColors.getRGBColor("CornflowerBlue")
+                        table.borderColor = WebColors.parse("CornflowerBlue")
                     }
 
                     override fun paintHeaderCell(cell: Cell, location: Point) {
-                        cell.borderColor = WebColors.getRGBColor("CornflowerBlue")
+                        cell.borderColor = WebColors.parse("CornflowerBlue")
                         cell.isUseVariableBorders = true
                         cell.setHorizontalAlignment(HorizontalAlignment.CENTER)
                         if (location.y > 0) {
@@ -334,7 +333,7 @@ internal class DesignedTableTest {
                     }
 
                     override fun paintCell(cell: Cell, location: Point) {
-                        cell.borderColor = WebColors.getRGBColor("SkyBlue")
+                        cell.borderColor = WebColors.parse("SkyBlue")
                         cell.isUseVariableBorders = true
                         if (location.y > 0) {
                             cell.borderWidthLeft = 0.5f

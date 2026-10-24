@@ -1,9 +1,8 @@
 package com.npk.documents
 
-import org.openpdf.text.*
-import org.openpdf.text.html.FontSize
-import org.openpdf.text.pdf.*
 import com.npk.documents.AbstractPdfDocument.PdfDocumentEncryption.EncryptionType
+import org.openpdf.text.*
+import org.openpdf.text.pdf.*
 import java.awt.Color
 import java.io.OutputStream
 import java.time.LocalDateTime
@@ -358,7 +357,7 @@ open class BasePdfDocument(outputStream: OutputStream, pageSize: Rectangle = Pag
 
 
     private fun calculateMarginTop(): Float {
-        var margin = DEFAULT_TOP_MARGIN + calculateLeading(headerFontSize) * headerTextLines.size
+        val margin = DEFAULT_TOP_MARGIN + calculateLeading(headerFontSize) * headerTextLines.size
         return max(DEFAULT_TOP_MARGIN, margin)
     }
 

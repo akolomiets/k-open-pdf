@@ -1,14 +1,11 @@
 package com.npk.documents
 
-import org.openpdf.text.Font
-import org.openpdf.text.Paragraph
-import org.openpdf.text.html.FontSize
-import org.openpdf.text.html.HtmlTags
-import org.openpdf.text.html.WebColors
 import com.npk.GeneratedDocumentPath
 import com.npk.documents.BreakingLine.breakingLine
 import com.npk.generatePdfDocument
 import org.junit.jupiter.api.Test
+import org.openpdf.text.Font
+import org.openpdf.text.Paragraph
 import java.nio.file.Path
 import kotlin.math.round
 
@@ -70,17 +67,16 @@ internal class TagPhraseTest {
                 ))
                 add(Paragraph(tagPhrase("<color IndianRed>Default font size text (Added to set leading to default)</color>")))
 
-
-                TagPhrase.registerHandler(HtmlTags.PRE) { token, phrase ->
+                TagPhrase.registerHandler("pre") { token, phrase ->
                     when {
-                        token.equals("<${HtmlTags.PRE}>", ignoreCase = true) -> {
+                        token.equals("<pre>", ignoreCase = true) -> {
                             if (phrase.getAttribute<Font>("font") == null) {
                                 phrase.setAttribute("font", phrase.font)
                                 phrase.font = PdfDocumentFonts.getCourier(phrase.font.size, phrase.font.color)
                             }
                             true
                         }
-                        token.equals("</${HtmlTags.PRE}>", ignoreCase = true) -> {
+                        token.equals("</pre>", ignoreCase = true) -> {
                             phrase.getAttribute<Font>("font")?.let {
                                 phrase.font = PdfDocumentFonts.getHelvetica(it.size, it.color)
                             }
@@ -93,7 +89,7 @@ internal class TagPhraseTest {
                 newLine()
                 add(tagPhrase("Register custom tag handler to change the font to <size large><pre>monospace</pre></size> name"))
 
-                breakingLine { color = WebColors.getRGBColor("DarkCyan") }
+                breakingLine { color = WebColors.parse("DarkCyan") }
 
                 h1("Heading 1 (${round(PdfDocumentFonts.DEFAULT_SIZE * FontSize.XX_LARGE.scale)})")
                 h2("Heading 2 (${round(PdfDocumentFonts.DEFAULT_SIZE * FontSize.X_LARGE.scale)})")

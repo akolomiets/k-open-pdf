@@ -1,18 +1,17 @@
 package com.npk.documents
 
-import org.openpdf.text.*
-import org.openpdf.text.alignment.HorizontalAlignment
-import org.openpdf.text.alignment.VerticalAlignment
-import org.openpdf.text.html.FontSize
-import org.openpdf.text.pdf.PdfAction
-import org.openpdf.text.pdf.PdfContentByte
-import org.openpdf.text.pdf.PdfTemplate
 import com.npk.documents.CleanSections.appendSpacing
 import com.npk.documents.DesignedTable.Design
 import com.npk.documents.KOpenPdfConstant.EMPTY_SYMBOL
 import com.npk.documents.KOpenPdfConstant.LIST_SYMBOL
 import com.npk.documents.PdfBodyListBuilder.Companion.createPdfList
 import com.npk.documents.PdfBodyParagraphBuilder.TextAlignment.Undefined
+import org.openpdf.text.*
+import org.openpdf.text.alignment.HorizontalAlignment
+import org.openpdf.text.alignment.VerticalAlignment
+import org.openpdf.text.pdf.PdfAction
+import org.openpdf.text.pdf.PdfContentByte
+import org.openpdf.text.pdf.PdfTemplate
 import java.net.URI
 
 

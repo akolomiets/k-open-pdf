@@ -19,7 +19,6 @@ interface CodeBlockBuilder {
 
 }
 
-@PdfBodyDslMarker
 fun PdfBodyElementBuilder.codeBlock(block: CodeBlockBuilder.(Table) -> Unit) {
     val table = CodeBlockTable().apply { block(this) }
     table.buildCodeBlockContent()

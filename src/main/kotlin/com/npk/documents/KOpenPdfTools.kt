@@ -1,17 +1,15 @@
 package com.npk.documents
 
-import org.openpdf.text.*
-import org.openpdf.text.alignment.HorizontalAlignment
-import org.openpdf.text.alignment.VerticalAlignment
-import org.openpdf.text.error_messages.MessageLocalization
-import org.openpdf.text.html.FontSize
-import org.openpdf.text.html.HtmlTags
-import org.openpdf.text.html.WebColors
-import org.openpdf.text.pdf.BaseFont
 import com.npk.documents.DesignedTable.Companion.BORDER_WIDTH
 import com.npk.documents.DesignedTable.Companion.EmptyDesign
 import com.npk.documents.DesignedTable.Design
 import com.npk.documents.DesignedTable.Designer
+import org.openpdf.text.*
+import org.openpdf.text.alignment.HorizontalAlignment
+import org.openpdf.text.alignment.VerticalAlignment
+import org.openpdf.text.error_messages.MessageLocalization
+import org.openpdf.text.pdf.BaseFont
+import java.awt.Color
 import java.awt.Point
 import java.util.*
 import kotlin.math.max
@@ -55,8 +53,8 @@ object PdfDocumentFonts {
         FontFactory.register(path, alias.takeIf(String::isNotEmpty))
 
     /**
-     * Constructs an embedded Unicode encoding [com.lowagie.text.Font] object
-     * @param fontname the name of the font
+     * Constructs an embedded Unicode encoding [org.openpdf.text.Font] object
+     * @param fontName the name of the font
      * @param size     the size of this font (optional)
      * @param color    the [java.awt.Color] of the font (optional)
      */
@@ -101,8 +99,8 @@ object PdfDocumentFonts {
  * Also, the custom tag handler can be registered.
  * Need to implement the [TagPhrase.TagPhraseHandler] interface and call the [TagPhrase.registerHandler("name", handler)] method
  *
- * @see [com.lowagie.text.html.WebColors]
- * @see [com.lowagie.text.html.FontSize]
+ * @see [WebColors]
+ * @see [FontSize]
  *
  */
 class TagPhrase : Phrase {
@@ -115,64 +113,71 @@ class TagPhrase : Phrase {
 
     companion object {
 
+        const val TAG_BOLD =        "b"
+        const val TAG_ITALIC =      "i"
+        const val TAG_UNDERLINE =   "u"
+        const val TAG_STRIKE_THRU = "s"
+        const val TAG_COLOR =       "color"
+        const val TAG_SIZE =        "size"
+
         private val TEXT_TOKEN_REGEX = "(?<=</?.{1,64}>)|(?=</?.{1,64}>)".toRegex()
 
         private val tagHandlers = mutableMapOf<String, TagPhraseHandler>().also {
-            it += HtmlTags.B to TagPhraseHandler { token, phrase ->
+            it += TAG_BOLD to TagPhraseHandler { token, phrase ->
                 when {
-                    token.equals("<${HtmlTags.B}>", ignoreCase = true) -> {
+                    token.equals("<$TAG_BOLD>", ignoreCase = true) -> {
                         phrase.font.style = phrase.font.style or Font.BOLD
                         true
                     }
-                    token.equals("</${HtmlTags.B}>", ignoreCase = true) -> {
+                    token.equals("</$TAG_BOLD>", ignoreCase = true) -> {
                         phrase.font.style = phrase.font.style and Font.BOLD.inv()
                         true
                     }
                     else -> false
                 }
             }
-            it += HtmlTags.I to TagPhraseHandler { token, phrase ->
+            it += TAG_ITALIC to TagPhraseHandler { token, phrase ->
                 when {
-                    token.equals("<${HtmlTags.I}>", ignoreCase = true) -> {
+                    token.equals("<$TAG_ITALIC>", ignoreCase = true) -> {
                         phrase.font.style = phrase.font.style or Font.ITALIC
                         true
                     }
-                    token.equals("</${HtmlTags.I}>", ignoreCase = true) -> {
+                    token.equals("</$TAG_ITALIC>", ignoreCase = true) -> {
                         phrase.font.style = phrase.font.style and Font.ITALIC.inv()
                         true
                     }
                     else -> false
                 }
             }
-            it += HtmlTags.U to TagPhraseHandler { token, phrase ->
+            it += TAG_UNDERLINE to TagPhraseHandler { token, phrase ->
                 when {
-                    token.equals("<${HtmlTags.U}>", ignoreCase = true) -> {
+                    token.equals("<$TAG_UNDERLINE>", ignoreCase = true) -> {
                         phrase.font.style = phrase.font.style or Font.UNDERLINE
                         true
                     }
-                    token.equals("</${HtmlTags.U}>", ignoreCase = true) -> {
+                    token.equals("</$TAG_UNDERLINE>", ignoreCase = true) -> {
                         phrase.font.style = phrase.font.style and Font.UNDERLINE.inv()
                         true
                     }
                     else -> false
                 }
             }
-            it += HtmlTags.S to TagPhraseHandler { token, phrase ->
+            it += TAG_STRIKE_THRU to TagPhraseHandler { token, phrase ->
                 when {
-                    token.equals("<${HtmlTags.S}>", ignoreCase = true) -> {
+                    token.equals("<$TAG_STRIKE_THRU>", ignoreCase = true) -> {
                         phrase.font.style = phrase.font.style or Font.STRIKETHRU
                         true
                     }
-                    token.equals("</${HtmlTags.S}>", ignoreCase = true) -> {
+                    token.equals("</$TAG_STRIKE_THRU>", ignoreCase = true) -> {
                         phrase.font.style = phrase.font.style and Font.STRIKETHRU.inv()
                         true
                     }
                     else -> false
                 }
             }
-            it += HtmlTags.COLOR to TagPhraseHandler { token, phrase ->
+            it += TAG_COLOR to TagPhraseHandler { token, phrase ->
                 when {
-                    token.startsWith("<${HtmlTags.COLOR}", ignoreCase = true) -> {
+                    token.startsWith("<$TAG_COLOR", ignoreCase = true) -> {
                         val colorText = token
                             .substring(6)
                             .removeSuffix(">")
@@ -183,11 +188,11 @@ class TagPhrase : Phrase {
                                 ?: LinkedList<java.awt.Color>().also { phrase.setAttribute("font-colors", it) }
 
                             phrase.font.color?.let { fontColors.push(it) }
-                            phrase.font.color = WebColors.getRGBColor(colorText)
+                            phrase.font.color = WebColors.parse(colorText)
                         }
                         true
                     }
-                    token.equals("</${HtmlTags.COLOR}>", ignoreCase = true) -> {
+                    token.equals("</$TAG_COLOR>", ignoreCase = true) -> {
                         phrase.font.color = phrase.getAttribute<Deque<java.awt.Color>>("font-colors")?.let {
                             if (it.isNotEmpty()) {
                                 it.pop()
@@ -200,9 +205,9 @@ class TagPhrase : Phrase {
                     else -> false
                 }
             }
-            it += "size" to TagPhraseHandler { token, phrase ->
+            it += TAG_SIZE to TagPhraseHandler { token, phrase ->
                 when {
-                    token.startsWith("<size", ignoreCase = true) -> {
+                    token.startsWith("<$TAG_SIZE", ignoreCase = true) -> {
                         val fontSizeText = token
                             .substring(5)
                             .removeSuffix(">")
@@ -215,7 +220,7 @@ class TagPhrase : Phrase {
                             val fontSize = FontSize.parse(fontSizeText)
                             if (fontSize != null) {
                                 fontSizesAttr.push(phrase.font.size)
-                                phrase.font.size = round((if (fontSize.isRelative) phrase.font.size else PdfDocumentFonts.DEFAULT_SIZE) * fontSize.scale)
+                                phrase.font.size = round((if (fontSize.relative) phrase.font.size else PdfDocumentFonts.DEFAULT_SIZE) * fontSize.scale)
                                 phrase.leading = max(phrase.leading, calculateLeading(phrase.font.size))
                             } else {
                                 val isPercent = fontSizeText.endsWith("%")
@@ -230,7 +235,7 @@ class TagPhrase : Phrase {
                         }
                         true
                     }
-                    token.equals("</size>", ignoreCase = true) -> {
+                    token.equals("</$TAG_SIZE>", ignoreCase = true) -> {
                         phrase.getAttribute<Deque<Float>>("font-size")?.let {
                             if (it.isNotEmpty()) {
                                 phrase.font.size = it.pop()
@@ -351,7 +356,7 @@ class DesignedTable(numColumns: Int, designer: Designer = NoStyle) : Table(numCo
 
     interface Design {
         /**
-         * Set the border for a table and header [com.lowagie.text.Rectangle] (TOP, BOTTOM, LEFT, RIGHT, NO_BORDER or BOX)
+         * Set the border for a table and header [org.openpdf.text.Rectangle] (TOP, BOTTOM, LEFT, RIGHT, NO_BORDER or BOX)
          */
         val border: Int
 
@@ -386,7 +391,7 @@ class DesignedTable(numColumns: Int, designer: Designer = NoStyle) : Table(numCo
         val headerVerticalAlignment: VerticalAlignment
 
         /**
-         * Set the stripes for data cells [com.lowagie.text.Rectangle]
+         * Set the stripes for data cells [org.openpdf.text.Rectangle]
          */
         val stripes: Int
 
@@ -678,5 +683,259 @@ internal object CleanSections {
         }
 
     fun Section.appendSpacing(spacing: Float) = add(Paragraph("").also { paragraph -> paragraph.spacingAfter = spacing })
+
+}
+
+/**
+ * Named font sizes defined by CSS
+ * <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/font-size">font-size</a> property
+ */
+enum class FontSize(val text: String, val scale: Float, val relative: Boolean) {
+    // Absolute-size keywords, based on the user's default font size (which is medium).
+    XX_SMALL("xx-small", 0.6f, false),
+    X_SMALL("x-small", 0.75f, false),
+    SMALL("small", 0.89f, false),
+    MEDIUM("medium", 1.0f, false),
+    LARGE("large", 1.2f, false),
+    X_LARGE("x-large", 1.5f, false),
+    XX_LARGE("xx-large", 2.0f, false),
+    XXX_LARGE("xxx-large", 2.5f, false),
+
+    // Relative-size keywords. The font will be larger or smaller relative to the parent element's font size,
+    // roughly by the ratio used to separate the absolute-size keywords above.
+    SMALLER("smaller", 0.89f, true),
+    LARGER("larger", 1.2f, true);
+
+    companion object {
+
+        fun parse(text: String?): FontSize? {
+            if (text.isNullOrEmpty() || text[0].isLetter()) {
+                return null
+            }
+            return FontSize.entries.find { it.text.equals(text, true) }
+        }
+
+    }
+
+}
+
+/**
+ * Source: Wikipedia http://en.wikipedia.org/wiki/Web_colors
+ * CSS4 Implementation based on: https://developer.mozilla.org/en-US/docs/Web/CSS/color_value
+ */
+object WebColors {
+
+    private val webColors = mapOf(
+        "aliceblue" to Color(0xf0, 0xf8, 0xff),
+        "antiquewhite" to Color(0xfa, 0xeb, 0xd7),
+        "aqua" to Color(0x00, 0xff, 0xff),
+        "aquamarine" to Color(0x7f, 0xff, 0xd4),
+        "azure" to Color(0xf0, 0xff, 0xff),
+        "beige" to Color(0xf5, 0xf5, 0xdc),
+        "bisque" to Color(0xff, 0xe4, 0xc4),
+        "black" to Color(0x00, 0x00, 0x00),
+        "blanchedalmond" to Color(0xff, 0xeb, 0xcd),
+        "blue" to Color(0x00, 0x00, 0xff),
+        "blueviolet" to Color(0x8a, 0x2b, 0xe2),
+        "brown" to Color(0xa5, 0x2a, 0x2a),
+        "burlywood" to Color(0xde, 0xb8, 0x87),
+        "cadetblue" to Color(0x5f, 0x9e, 0xa0),
+        "chartreuse" to Color(0x7f, 0xff, 0x00),
+        "chocolate" to Color(0xd2, 0x69, 0x1e),
+        "coral" to Color(0xff, 0x7f, 0x50),
+        "cornflowerblue" to Color(0x64, 0x95, 0xed),
+        "cornsilk" to Color(0xff, 0xf8, 0xdc),
+        "crimson" to Color(0xdc, 0x14, 0x3c),
+        "cyan" to Color(0x00, 0xff, 0xff),
+        "darkblue" to Color(0x00, 0x00, 0x8b),
+        "darkcyan" to Color(0x00, 0x8b, 0x8b),
+        "darkgoldenrod" to Color(0xb8, 0x86, 0x0b),
+        "darkgray" to Color(0xa9, 0xa9, 0xa9),
+        "darkgreen" to Color(0x00, 0x64, 0x00),
+        "darkkhaki" to Color(0xbd, 0xb7, 0x6b),
+        "darkmagenta" to Color(0x8b, 0x00, 0x8b),
+        "darkolivegreen" to Color(0x55, 0x6b, 0x2f),
+        "darkorange" to Color(0xff, 0x8c, 0x00),
+        "darkorchid" to Color(0x99, 0x32, 0xcc),
+        "darkred" to Color(0x8b, 0x00, 0x00),
+        "darksalmon" to Color(0xe9, 0x96, 0x7a),
+        "darkseagreen" to Color(0x8f, 0xbc, 0x8f),
+        "darkslateblue" to Color(0x48, 0x3d, 0x8b),
+        "darkslategray" to Color(0x2f, 0x4f, 0x4f),
+        "darkslategrey" to Color(0x2f, 0x4f, 0x4f),
+        "darkturquoise" to Color(0x00, 0xce, 0xd1),
+        "darkviolet" to Color(0x94, 0x00, 0xd3),
+        "deeppink" to Color(0xff, 0x14, 0x93),
+        "deepskyblue" to Color(0x00, 0xbf, 0xff),
+        "dimgray" to Color(0x69, 0x69, 0x69),
+        "dimgrey" to Color(0x69, 0x69, 0x69),
+        "dodgerblue" to Color(0x1e, 0x90, 0xff),
+        "firebrick" to Color(0xb2, 0x22, 0x22),
+        "floralwhite" to Color(0xff, 0xfa, 0xf0),
+        "forestgreen" to Color(0x22, 0x8b, 0x22),
+        "fuchsia" to Color(0xff, 0x00, 0xff),
+        "gainsboro" to Color(0xdc, 0xdc, 0xdc),
+        "ghostwhite" to Color(0xf8, 0xf8, 0xff),
+        "gold" to Color(0xff, 0xd7, 0x00),
+        "goldenrod" to Color(0xda, 0xa5, 0x20),
+        "gray" to Color(0x80, 0x80, 0x80),
+        "green" to Color(0x00, 0x80, 0x00),
+        "greenyellow" to Color(0xad, 0xff, 0x2f),
+        "honeydew" to Color(0xf0, 0xff, 0xf0),
+        "hotpink" to Color(0xff, 0x69, 0xb4),
+        "indianred" to Color(0xcd, 0x5c, 0x5c),
+        "indigo" to Color(0x4b, 0x00, 0x82),
+        "ivory" to Color(0xff, 0xff, 0xf0),
+        "khaki" to Color(0xf0, 0xe6, 0x8c),
+        "lavender" to Color(0xe6, 0xe6, 0xfa),
+        "lavenderblush" to Color(0xff, 0xf0, 0xf5),
+        "lawngreen" to Color(0x7c, 0xfc, 0x00),
+        "lemonchiffon" to Color(0xff, 0xfa, 0xcd),
+        "lightblue" to Color(0xad, 0xd8, 0xe6),
+        "lightcoral" to Color(0xf0, 0x80, 0x80),
+        "lightcyan" to Color(0xe0, 0xff, 0xff),
+        "lightgoldenrodyellow" to Color(0xfa, 0xfa, 0xd2),
+        "lightgray" to Color(0xd3, 0xd3, 0xd3),
+        "lightgreen" to Color(0x90, 0xee, 0x90),
+        "lightgrey" to Color(0xd3, 0xd3, 0xd3),
+        "lightpink" to Color(0xff, 0xb6, 0xc1),
+        "lightsalmon" to Color(0xff, 0xa0, 0x7a),
+        "lightseagreen" to Color(0x20, 0xb2, 0xaa),
+        "lightskyblue" to Color(0x87, 0xce, 0xfa),
+        "lightslategray" to Color(0x77, 0x88, 0x99),
+        "lightslategrey" to Color(0x77, 0x88, 0x99),
+        "lightsteelblue" to Color(0xb0, 0xc4, 0xde),
+        "lightyellow" to Color(0xff, 0xff, 0xe0),
+        "lime" to Color(0x00, 0xff, 0x00),
+        "limegreen" to Color(0x32, 0xcd, 0x32),
+        "linen" to Color(0xfa, 0xf0, 0xe6),
+        "magenta" to Color(0xff, 0x00, 0xff),
+        "maroon" to Color(0x80, 0x00, 0x00),
+        "mediumaquamarine" to Color(0x66, 0xcd, 0xaa),
+        "mediumblue" to Color(0x00, 0x00, 0xcd),
+        "mediumorchid" to Color(0xba, 0x55, 0xd3),
+        "mediumpurple" to Color(0x93, 0x70, 0xdb),
+        "mediumseagreen" to Color(0x3c, 0xb3, 0x71),
+        "mediumslateblue" to Color(0x7b, 0x68, 0xee),
+        "mediumspringgreen" to Color(0x00, 0xfa, 0x9a),
+        "mediumturquoise" to Color(0x48, 0xd1, 0xcc),
+        "mediumvioletred" to Color(0xc7, 0x15, 0x85),
+        "midnightblue" to Color(0x19, 0x19, 0x70),
+        "mintcream" to Color(0xf5, 0xff, 0xfa),
+        "mistyrose" to Color(0xff, 0xe4, 0xe1),
+        "moccasin" to Color(0xff, 0xe4, 0xb5),
+        "navajowhite" to Color(0xff, 0xde, 0xad),
+        "navy" to Color(0x00, 0x00, 0x80),
+        "oldlace" to Color(0xfd, 0xf5, 0xe6),
+        "olive" to Color(0x80, 0x80, 0x00),
+        "olivedrab" to Color(0x6b, 0x8e, 0x23),
+        "orange" to Color(0xff, 0xa5, 0x00),
+        "orangered" to Color(0xff, 0x45, 0x00),
+        "orchid" to Color(0xda, 0x70, 0xd6),
+        "palegoldenrod" to Color(0xee, 0xe8, 0xaa),
+        "palegreen" to Color(0x98, 0xfb, 0x98),
+        "paleturquoise" to Color(0xaf, 0xee, 0xee),
+        "palevioletred" to Color(0xdb, 0x70, 0x93),
+        "papayawhip" to Color(0xff, 0xef, 0xd5),
+        "peachpuff" to Color(0xff, 0xda, 0xb9),
+        "peru" to Color(0xcd, 0x85, 0x3f),
+        "pink" to Color(0xff, 0xc0, 0xcb),
+        "plum" to Color(0xdd, 0xa0, 0xdd),
+        "powderblue" to Color(0xb0, 0xe0, 0xe6),
+        "purple" to Color(0x80, 0x00, 0x80),
+        "rebeccapurple" to Color(0x66, 0x33, 0x99),
+        "red" to Color(0xff, 0x00, 0x00),
+        "rosybrown" to Color(0xbc, 0x8f, 0x8f),
+        "royalblue" to Color(0x41, 0x69, 0xe1),
+        "saddlebrown" to Color(0x8b, 0x45, 0x13),
+        "salmon" to Color(0xfa, 0x80, 0x72),
+        "sandybrown" to Color(0xf4, 0xa4, 0x60),
+        "seagreen" to Color(0x2e, 0x8b, 0x57),
+        "seashell" to Color(0xff, 0xf5, 0xee),
+        "sienna" to Color(0xa0, 0x52, 0x2d),
+        "silver" to Color(0xc0, 0xc0, 0xc0),
+        "skyblue" to Color(0x87, 0xce, 0xeb),
+        "slateblue" to Color(0x6a, 0x5a, 0xcd),
+        "slategray" to Color(0x70, 0x80, 0x90),
+        "slategrey" to Color(0x70, 0x80, 0x90),
+        "snow" to Color(0xff, 0xfa, 0xfa),
+        "springgreen" to Color(0x00, 0xff, 0x7f),
+        "steelblue" to Color(0x46, 0x82, 0xb4),
+        "tan" to Color(0xd2, 0xb4, 0x8c),
+        "transparent" to Color(0x00, 0x00, 0x00),
+        "teal" to Color(0x00, 0x80, 0x80),
+        "thistle" to Color(0xd8, 0xbf, 0xd8),
+        "tomato" to Color(0xff, 0x63, 0x47),
+        "turquoise" to Color(0x40, 0xe0, 0xd0),
+        "violet" to Color(0xee, 0x82, 0xee),
+        "wheat" to Color(0xf5, 0xde, 0xb3),
+        "white" to Color(0xff, 0xff, 0xff),
+        "whitesmoke" to Color(0xf5, 0xf5, 0xf5),
+        "yellow" to Color(0xff, 0xff, 0x00),
+        "yellowgreen" to Color(0x9a, 0xcd, 0x32)
+    )
+
+    fun parse(text: String): Color {
+        require(text.isNotBlank()) { "text argument must not be empty" }
+        return text.trim().lowercase().let {
+            when {
+                it.startsWith("#") ->
+                    it.removePrefix("#")
+                        .let { digits ->
+                            require(
+                                (digits.length == 3 || digits.length == 4 || digits.length == 6 || digits.length == 8)
+                                        && digits.all { ch -> ch.isDigit() || ch in 'a'..'f' }
+                            ) { "Unknown color format '$text'" }
+
+                            val rgb = if (digits.length == 3 || digits.length == 4) {
+                                buildString {
+                                    digits.forEach { ch ->
+                                        append(ch)
+                                        append(ch)
+                                    }
+                                }
+                            } else {
+                                digits
+                            }
+
+                            Color(
+                                rgb.substring(0, 2).toInt(16),
+                                rgb.substring(2, 4).toInt(16),
+                                rgb.substring(4, 6).toInt(16),
+                                if (rgb.length == 8) rgb.substring(6, 8).toInt(16) else 0xff
+                            )
+                        }
+                it.startsWith("rgb") -> {
+                    val c = intArrayOf(0, 0, 0, 0xff)
+                    val tok = StringTokenizer(it.removePrefix("rgba").removePrefix("rgb"), "()/, \t\r\n")
+
+                    for (k in 0..2) {
+                        val v = tok.nextToken()
+                        if (v.endsWith("%")) {
+                            c[k] = (v.removeSuffix("%").toDouble() * 255 / 100).toInt()
+                        } else {
+                            c[k] = v.toDouble().toInt()
+                        }
+                        if (c[k] < 0) {
+                            c[k] = 0
+                        } else if (c[k] > 255) {
+                            c[k] = 255
+                        }
+                    }
+                    if (tok.hasMoreElements()) {
+                        // alpha
+                        val v = tok.nextToken()
+                        if (v.endsWith("%")) {
+                            c[3] = (v.removeSuffix("%").toDouble() * 255 / 100).toInt()
+                        } else {
+                            c[3] = (v.toDouble() * 255).toInt()
+                        }
+                    }
+                    return Color(c[0], c[1], c[2], c[3])
+                }
+                else -> requireNotNull(webColors[it]) { "Color '$text' not found" }
+            }
+        }
+    }
 
 }

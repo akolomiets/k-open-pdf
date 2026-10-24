@@ -2,7 +2,6 @@ package com.npk.documents
 
 import org.openpdf.text.*
 import org.openpdf.text.alignment.HorizontalAlignment
-import org.openpdf.text.html.FontSize
 import org.openpdf.text.pdf.draw.DottedLineSeparator
 import org.openpdf.text.pdf.draw.LineSeparator
 import com.npk.documents.KOpenPdfConstant.EMPTY_SYMBOL
